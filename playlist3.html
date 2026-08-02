@@ -98,16 +98,18 @@ audio{display:none}
 <audio id="player" preload="auto"></audio>
 <script>
 const tracks=[
-  {title:"En Una Noche Azul",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDhqQONfUW5Qoj0Xu1SvN0mATCFTqd4XxVdRkNOmO2M7bE?e=j9KlL2&download=1"},
-  {title:"El Bosque",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCKZwmOM9MJQYH3qX-NHmkaAVL4-An7HhrCtYtMAmRQS9E?e=QSJ3HH&download=1"},
-  {title:"Te Llaman",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQB8G0eT96FwS5uP-JnEI5BaATZ6bl_ppnupmaIqmHXTR5I?e=Kg3jtg&download=1"},
-  {title:"En el País de las Almas Perdidas",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCuwxnljOmSQLk8xniI-vY7AQlPeNQhqW3nHCmrLhB5kEQ?e=i84VQC&download=1"},
-  {title:"El Éxodo",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQBvUCRaYqYQRodv3YcAFL8IAcvDONTGoz_a9tDng9be2KY?e=8iC39j&download=1"},
-  {title:"Urnas de Asfalto",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCDSKgOllE4TpbpyeuKln5fAejpsfUFeZ14TRDGQ1QIT_E?e=Wzk8Nh&download=1"},
-  {title:"Tú Jaula",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQD0v0mfAohTTIYInWVH_sNwAaGVZv7poNOGwWNh3Wp9dpk?e=NdRGva&download=1"},
-  {title:"La Casa Desdichada",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDtGtcX6AVgSpvWWfmP5CZdATz-tVeSXNM_R5-jDTf5NDg?e=C4ZQIc&download=1"},
-  {title:"El Velo",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQBz4SloaqzQQo8gztRi5IP4AdzNo4ZS1e8nBLACDM8CCu8?e=bsi6FA&download=1"},
+ { title: "En una Noche Azul", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDhqQONfUW5Qoj0Xu1SvN0mAbmTOp8fxd13_omg1msLCVo?e=ki5dna&download=1" },
+  { title: "El Bosque", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCKZwmOM9MJQYH3qX-NHmkaAcM56e9PpuE0hAvhTTp00Jw?e=nGJ1cK&download=1" },
+  { title: "Te Llaman", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQB8G0eT96FwS5uP-JnEI5BaAdPjo5WM1i2RzZY840Bi9fg?e=yubPpB&download=1" },
+  { title: "En el País de las Almas Perdidas", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQBu-l1x64aJRKNXrwH-lFaOAQK3U23DX4T9JcGPuCsiqhQ?e=j5P3qq&download=1" },
+  { title: "El Éxodo", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQD4wqR840c_SYPFribJ9VmIAcso8s-DfCa1iiPYfMOZ7io?e=fei918&download=1" },
+  { title: "Urnas de Asfalto", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCDSKgOllE4TpbpyeuKln5fAeLp_GOKhEDFd2ipqepgrf8?e=CX5N8J&download=1" },
+  { title: "Tu Jaula", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCrLbu3lxtqQbekegMtFhFrARz3pdmPpBDwyYIC0VIEwu0?e=iVs5rD&download=1" },
+  { title: "La Casa Desdichada", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDtGtcX6AVgSpvWWfmP5CZdAWVSsIxzd-o_05Mrw3f-FE4?e=8YEx0I&download=1" },
+  { title: "El Recuerdo", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQA1M-IYUiXbSaOZ64vpJuPcAWpkO08_WJHqAhZ083B1C54?e=unOJAc&download=1" },
+  { title: "El Velo", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQBz4SloaqzQQo8gztRi5IP4Adkq90TxtceH7Jfj7D5C4PA?e=vr52QW&download=1" },
 ];
+
 const audio=document.getElementById('player');
 let current=-1;
 function fmt(s){if(isNaN(s)||s===undefined)return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`}
