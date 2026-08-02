@@ -98,14 +98,15 @@ audio{display:none}
 <audio id="player" preload="auto"></audio>
 <script>
 const tracks=[
-  {title:"Por No Decir...",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQA0pjt6A2tIQpTJLfupEfW2Aflc4nn7O4kk7KK5o0YK6o8?e=yaPGvZ&download=1"},
-  {title:"Déjame Soñar",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDTHZmInD6hTaNkH3r04i3QAekPe2wIqomXkihez3eCMWc?e=Y0HPux&download=1"},
-  {title:"Desesperados",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQAE8Zl9O_xMQYdkWtZqB8rOAXqIlHnTtc1fvxEQ7cCOIFM?e=01fhjC&download=1"},
-  {title:"En el Ojo del Huracán",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDRLcpfz76NTLMZo6AczUPoAWbU-kCd6Yt78frRMGvCCoc?e=QMFS4U&download=1"},
-  {title:"Sol Rojo",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCoGKM8mRWtQopiwjdLvyGMAQ9E9WoKgGGcQWTHNC7vEl0?e=RMRlhW&download=1"},
-  {title:"El Blues de la Triste Figura",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQAO0j-20GiMSofrAWVZyZ7kASlLsWVFO-igBlhPiVg19BM?e=JKqsWl&download=1"},
-  {title:"Volver a Nacer",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCt54hnblG-T6Ua0DbXQprTAUKwN-h2K5yBgshcO0i1ubc?e=SDCD5E&download=1"},
-  {title:"Días Enteros [Dirty Blues]",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCOVusWAK3-Ra1yul1VG9DSAUloVuKi7TLiTVqoRvpPd5w?e=ENqegC&download=1"},
+{ title: "El Ojo del Huracán", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQD-z-zZlY6pTLID5DGjM4wsAaPM-m4Twb0TQiomlMJE-Tw?e=ZiNCiE&download=1" },
+  { title: "Déjame Soñar", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDTHZmInD6hTaNkH3r04i3QAT9ul_-WfmBD_llA1mSNYD0?e=H7saOB&download=1" },
+  { title: "La Verdad", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQAdm-He99uFR6IOHDZ03vKCAaL8cmumQe8D2pMh1Gzif68?e=ebkHVd&download=1" },
+  { title: "Sol Rojo", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDPVvAda35iQq9W1r5IlsBXAettY6CtGRmsa6P_5sid8sU?e=8wr9Dk&download=1" },
+  { title: "El Blues de la Triste Figura", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQAs_W5kMOvDSKywX4FfhnHMAWX29fTbiO51TYjbb7Q8WOQ?e=Xq227t&download=1" },
+  { title: "Volver a Nacer", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQAp-KcTboahTIdb2B-lTpBJAX9nGel9LnE9JR6PKNk5Ydo?e=B5bVU1&download=1" },
+  { title: "La Gacela", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQAJiuHIHcXZRK0GV2JFUkrSARAOF7xoDZXDHH5cRFQx2BM?e=dj8iFm&download=1" },
+  { title: "Desesperados", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCR80tHE3V3RocOTqVloMzdAVjybwsZk9C407YqetLOyms?e=Hd6vBz&download=1" },
+  { title: "Días Enteros – Dirty Blues", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCOVusWAK3-Ra1yul1VG9DSARaqAWKnfHDXAnIF3h3NfeU?e=qQ7YE9&download=1" },
 ];
 const audio=document.getElementById('player');
 let current=-1;
