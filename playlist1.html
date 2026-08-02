@@ -101,14 +101,16 @@ audio{display:none}
 <audio id="player" preload="auto"></audio>
 <script>
 const tracks=[
-  {title:"Quemas",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQC3hSvlWoglR4EeEExGfhjBAZhiYjBOY0hNVCLIeoLiHyU?e=93DW9u&download=1"},
-  {title:"Eres Tú",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDGj7kk13XdSL7QdTfff2IYAVcf9Up_mH4BwAJmzscWEzE?e=uUJF8Z&download=1"},
-  {title:"Animales",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDyBrFiv-SiTLMuLeHWpEFyAcPlxOBZLJbhu1qUDV9Ramo?e=vnibA4&download=1"},
-  {title:"Sigo Tu Esencia",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDRG6QV9CG5Sr5_2CClLLfBAcpiRS95xLTAtedGm-OWX1s?e=vVKafu&download=1"},
-  {title:"Nuestros Caminos",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDb6RoVLxWXToIWqzDX0DrJAT58DQG_Aksz6OPBG3LGkIM?e=eIi6dK&download=1"},
-  {title:"No Pares",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCynPPKB8F6RICHu8wP78-yAVeV4renfeeU5Ih_elxtJ1Y?e=ctMeYD&download=1"},
-  {title:"Es el Sino de la Vida",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQBOg8-dKy62T45j1pgaV4OyAZVrZbNKoDcBQX-yFEnncIk?e=WEzzTK&download=1"},
-  {title:"Días Enteros",url:"https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDyBrFiv-SiTLMuLeHWpEFyAcPlxOBZLJbhu1qUDV9Ramo?e=ZclpMV&download=1"},
+ { title: "Quemas", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQC3hSvlWoglR4EeEExGfhjBASSIa2s3rcLlMdm3D5B0XVk?e=yFmb4J&download=1" },
+  { title: "Eres Tú", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDGj7kk13XdSL7QdTfff2IYAfEAyuRSow9FSCIv4SbwgeI?e=aZcqd4&download=1" },
+  { title: "Animales", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQA4bI7F3QnHQIX67hlYr_6HAeXLhpkEqyWGCMdtJ-yXjw4?e=chFp9U&download=1" },
+  { title: "Sigo Tu Esencia", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDRG6QV9CG5Sr5_2CClLLfBAR79RgcJyIIjjlzfjFLVcFc?e=HyUrvf&download=1" },
+  { title: "Nuestros Caminos", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDb6RoVLxWXToIWqzDX0DrJAX4U3ZeZy6nL8CTxzY480hs?e=lHC984&download=1" },
+  { title: "Es el Sino de la Vida", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQBOg8-dKy62T45j1pgaV4OyAWBxlDBupMxlQrYzQUZvKu0?e=9mkiyG&download=1" },
+  { title: "No Pares", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCynPPKB8F6RICHu8wP78-yAXNMIl4gga_g2EDdBA5a2LU?e=4II1TQ&download=1" },
+  { title: "Fusionados", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQCcpFJHf5_PSoaKWwazdnuYAf5NfKDwi3WcD_4KknkrPEs?e=dfMVJn&download=1" },
+  { title: "Sin Valor", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQAu16K9xLPZTYcs824BL32TAZYL0rRowkfNA71MpgcySC8?e=a2nods&download=1" },
+  { title: "Días Enteros", url: "https://cur19364667-my.sharepoint.com/:u:/g/personal/ks1070_office365x_org/IQDyBrFiv-SiTLMuLeHWpEFyAXa_DyJ_fey6yqsTAJ_DdEo?e=Vi3egp&download=1" },
 ];
 const audio=document.getElementById('player');
 let current=-1;
