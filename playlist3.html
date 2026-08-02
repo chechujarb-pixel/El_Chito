@@ -113,7 +113,7 @@ const tracks=[
 const audio=document.getElementById('player');
 let current=-1;
 function fmt(s){if(isNaN(s)||s===undefined)return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`}
-function renderList(){document.getElementById('tracklist').innerHTML=tracks.map((t,i)=>`<div class="track" id="track${i}" onclick="loadTrack(${i})"><div class="eq"><span></span><span></span><span></span></div><div class="loading"></div><div class="track-num">${i+1}</div><div class="track-info"><div class="track-name">${t.title}</div></div><div class="track-dur" id="dur${i}">0:00</div></div>`).join('')}
+function renderList(){document.getElementById('tracklist').innerHTML=tracks.map((t,i)=>`<div class="track" id="track${i}" onclick="loadTrack(${i})"><div class="eq"><span></span><span></span><span></span></div><div class="loading"></div><div class="track-num">${i+1}</div><div class="track-info"><div class="track-name">${t.title}</div></div><div class="track-dur" id="dur${i}">--:--</div></div>`).join('')}
 function setActive(i){document.querySelectorAll('.track').forEach(el=>el.classList.remove('active','playing','buffering'));if(i>=0){document.getElementById(`track${i}`).classList.add('active');document.getElementById(`track${i}`).scrollIntoView({behavior:'smooth',block:'nearest'})}document.getElementById('npTitle').textContent=i>=0?tracks[i].title:'—';document.getElementById('npIndex').textContent=i>=0?`${i+1} de ${tracks.length}`:'—'}
 function loadTrack(i){current=i;setActive(i);document.getElementById(`track${i}`).classList.add('buffering');audio.src=tracks[i].url;audio.volume=document.getElementById('volume').value;audio.load();audio.play().catch(()=>{})}
 function togglePlay(){if(current<0){loadTrack(0);return}if(audio.paused)audio.play();else audio.pause()}
@@ -127,7 +127,9 @@ audio.addEventListener('loadedmetadata',()=>{document.getElementById(`dur${curre
 audio.addEventListener('ended',()=>{if(current<tracks.length-1)loadTrack(current+1);else{document.getElementById('iconPlay').style.display='';document.getElementById('iconPause').style.display='none'}});
 audio.addEventListener('waiting',()=>{const el=document.getElementById(`track${current}`);if(el){el.classList.remove('playing');el.classList.add('buffering')}});
 document.getElementById('progressWrap').addEventListener('click',(e)=>{if(!audio.duration)return;const rect=e.currentTarget.getBoundingClientRect();audio.currentTime=((e.clientX-rect.left)/rect.width)*audio.duration});
+function preloadDurations(){tracks.forEach((t,i)=>{const a=new Audio();a.preload='metadata';a.src=t.url;a.addEventListener('loadedmetadata',()=>{t.duration=a.duration;const el=document.getElementById(`dur${i}`);if(el)el.textContent=fmt(a.duration)})})}
 renderList();
+preloadDurations();
 window.addEventListener('load',()=>loadTrack(0));
 </script>
 </body>
