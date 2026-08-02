@@ -64,9 +64,9 @@ audio{display:none}
 @media(min-width:860px){
 .container{max-width:1080px;display:grid;grid-template-columns:380px 1fr;column-gap:40px;padding:0 32px 100px;align-items:start}
 .back-btn{grid-column:1/-1;padding-left:0}
-.header{grid-column:2;border-bottom:none;padding:24px 0 0;display:flex;gap:20px;align-items:flex-start}
+.header{grid-column:1;border-bottom:none;padding:24px 0 0;display:flex;gap:20px;align-items:flex-start}
 .header .cover-wrap{width:140px;flex-shrink:0;margin-bottom:0}
-.header-text{flex:1;min-width:0;padding-top:4px}
+.header-text{grid-column:2;flex:1;min-width:0;padding-top:4px}
 .now-playing{grid-column:1;margin:20px 0 0}
 .tracklist{grid-column:2;margin:24px 0 0;max-height:calc(100vh - 48px);overflow-y:auto;position:sticky;top:24px}
 }
