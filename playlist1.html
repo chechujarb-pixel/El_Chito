@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>El Despertar de la Carretera</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">  
 <style>
 :root{--bg:#0d0a07;--surface:#1a1208;--accent:#e8a020;--accent2:#c45c10;--text:#f0e8d8;--muted:#7a6a52;--bar-h:4px}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -24,9 +25,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .header-meta{margin-top:8px;font-size:13px;color:var(--muted);font-weight:300;letter-spacing:1px}
 .now-playing{margin:20px 16px;background:linear-gradient(135deg,#1e1508 0%,#2a1c0a 100%);border:1px solid rgba(232,160,32,0.2);border-radius:12px;padding:20px;position:relative;overflow:hidden}
 .now-playing::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(232,160,32,0.15) 0%,transparent 70%);border-radius:50%}
-.np-label{font-size:10px;letter-spacing:3px;color:var(--accent);font-family:'Bebas Neue',sans-serif;margin-bottom:6px}
-.np-title{font-size:20px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.np-index{font-size:12px;color:var(--muted);margin-top:4px}
+.np-label{font-family:'Roboto Condensed',sans-serif;font-size:10px;letter-spacing:3px;color:var(--accent);font-family:'Bebas Neue',sans-serif;margin-bottom:6px}
+.np-title{font-family:'Roboto Condensed',sans-serif;font-size:20px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-index{font-family:'Roboto Condensed',sans-serif;font-size:12px;color:var(--muted);margin-top:4px}
 .progress-wrap{margin-top:16px;cursor:pointer}
 .progress-bg{width:100%;height:var(--bar-h);background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;border-radius:2px;transition:width 0.3s linear}
