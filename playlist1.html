@@ -80,6 +80,25 @@ audio{display:none}
   .brand-logo{display:none}
   .brand-logo-header{display:block;max-width:130px;height:auto;margin:0 0 14px}
 }
+
+.lyrics-panel{margin:22px 0 0;border:1px solid rgba(232,160,32,.28);border-radius:16px;background:var(--surface);overflow:hidden;color:var(--text)}
+.lyrics-panel summary{cursor:pointer;list-style:none;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:700;letter-spacing:.08em;font-size:12px;color:var(--accent)}
+.lyrics-panel summary::-webkit-details-marker{display:none}
+.lyrics-panel summary:after{content:'＋';font-size:18px;line-height:1}
+.lyrics-panel[open] summary:after{content:'−'}
+.lyrics-content{position:relative;border-top:1px solid rgba(232,160,32,.18);padding:16px 18px 20px;max-height:340px;overflow:auto;text-align:center;scroll-behavior:smooth}
+.lyrics-spacer{height:120px}
+.lyrics-now{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:500;letter-spacing:0;color:var(--accent)}
+.lyrics-hint{font-size:12px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+.lyrics-line{padding:7px 4px;color:var(--muted);font-size:15px;line-height:1.5;transition:color .18s,transform .18s}
+.lyrics-line.active{color:var(--accent);font-weight:700;transform:scale(1.025)}
+.lyrics-empty{padding:12px 4px;color:var(--muted);font-size:13px;line-height:1.6}
+@media (min-width:860px){
+  .lyrics-panel{grid-column:2;grid-row:3;margin:24px 0 0;align-self:start}
+  .header .cover-wrap{grid-row:3 / span 2;margin-top:24px;align-self:start}
+  .tracklist{grid-row:4;margin-top:18px;align-self:start}
+}
+
 </style>
 </head>
 <body>
@@ -120,35 +139,123 @@ audio{display:none}
       <input type="range" id="volume" min="0" max="1" step="0.02" value="0.85" oninput="setVolume(this.value)">
     </div>
   </div>
+  <details class="lyrics-panel" id="lyricsPanel">
+    <summary><span id="lyricsTrackName" class="lyrics-now">♪</span></summary>
+    <div class="lyrics-content" id="lyricsContent" aria-live="polite">
+      <p class="lyrics-empty">Cargando la letra desde OneDrive…</p>
+    </div>
+  </details>
   <div class="tracklist" id="tracklist"></div>
 </div>
-<audio id="player" preload="auto"></audio>
+<audio id="player" preload="metadata"></audio>
+<div id="audioStatus" role="status" aria-live="polite" style="max-width:720px;margin:10px auto;padding:0 18px;color:var(--muted);font-size:13px;line-height:1.5;text-align:center"></div>
 <script>
 const tracks=[
- { title: "Quemas", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQCBPhlO-absT55MTtPyTOaKARktOUTEYAGb6SamrRfp-XQ?e=xHxSyB&download=1" },
-  { title: "Eres Tú", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQC8X5LlB_LmQaDffnqoooC8AXwbc4okLBFGZAp7la286Bw?e=PdMc3O&download=1" },
-  { title: "Animales", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQBhbDBps9aPQafdSmxWIGfoATpKIiK6B-AE2TSBR0-_B9w?e=5dOgrI&download=1" },
-  { title: "Sigo Tu Esencia", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQBDN2ZqDXA8QYCfIgAKGAaBAbgL7S0uOWUl9GUkh1lMSKc?e=7gREec&download=1" },
-  { title: "Nuestros Caminos", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQBF_B37opwsRIbL45vLkukQAWZw_F1cXcpMow4hp-GA4EM?e=gqcALd&download=1" },
-  { title: "Es el Sino de la Vida", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQCDQoI_g6OQTr3tDPyjMZrYATeNg1qVRuahrGgCoRmkfgY?e=2BaSyP&download=1" },
-  { title: "No Pares", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQC9s6c9PlreSI0O-w4eWBPSAWN-rkjRLM_1BTaNQOjPcVw?e=oJhNPu&download=1" },
-  { title: "Fusionados", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQDZXLdPMdT_SKKNwYwH86kuAa7Qo4fDe_ubUGrn-UgzMy4?e=Zz26oH&download=1" },
-  { title: "Sin Valor", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQAKQSePaDTZRKRDoyAGM7kZAbXO-R1NWGzCeNCnbZzNFts?e=QxHsac&download=1" },
-  { title: "Días Enteros", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQB3PiAzcleLSrQ9YmrrZgMcATgUTAdvp4G_wL4YpGvAN8A?e=4X2MfV&download=1" },
+ { title: "Quemas", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQCBPhlO-absT55MTtPyTOaKARktOUTEYAGb6SamrRfp-XQ?e=xHxSyB&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQAdDXX_dUKGSolkS0XyzRsEAYlltm1vnxdKXPecL-LmJ2U?e=qEiVHD&download=1' },
+  { title: "Eres Tú", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQC8X5LlB_LmQaDffnqoooC8AXwbc4okLBFGZAp7la286Bw?e=PdMc3O&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQCK54weKiIPTI0iL8RuHkTKAbjZHYvED5wQXO-rfs466NU?e=yCXQFM&download=1' },
+  { title: "Animales", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQBhbDBps9aPQafdSmxWIGfoATpKIiK6B-AE2TSBR0-_B9w?e=5dOgrI&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQCejThL6wh1S6yyOX-ApwiaAbwlrOxXecnPBpxc6JBWbRY?e=lE4aHl&download=1' },
+  { title: "Sigo Tu Esencia", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQBDN2ZqDXA8QYCfIgAKGAaBAbgL7S0uOWUl9GUkh1lMSKc?e=7gREec&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQBm5xhv7Il_QLPtsoHxUuAmAUQsrquV4yVIaS834J0XlYE?e=HTvQib&download=1' },
+  { title: "Nuestros Caminos", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQBF_B37opwsRIbL45vLkukQAWZw_F1cXcpMow4hp-GA4EM?e=gqcALd&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQA085z2827USqrt47jXWhiEAUXYPodNYP0QxPIug5GPOlA?e=yjXYax&download=1' },
+  { title: "Es el Sino de la Vida", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQCDQoI_g6OQTr3tDPyjMZrYATeNg1qVRuahrGgCoRmkfgY?e=2BaSyP&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQCrD8-oBusoQ6bOu3YaxEuXATFY_sLUM0Q4S8-at3O-bko?e=eLuNl4&download=1' },
+  { title: "No Pares", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQC9s6c9PlreSI0O-w4eWBPSAWN-rkjRLM_1BTaNQOjPcVw?e=oJhNPu&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQCHr1T-0comQabDLk9gvB4PATq97G-iTN34lf0R2AgUVqU?e=9jgmpv&download=1' },
+  { title: "Fusionados", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQDZXLdPMdT_SKKNwYwH86kuAa7Qo4fDe_ubUGrn-UgzMy4?e=Zz26oH&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQBqZKlqELyLS40JEeSD1QFQAYBfWTwkEpc485jZnO8siGY?e=YElPaQ&download=1' },
+  { title: "Sin Valor", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQAKQSePaDTZRKRDoyAGM7kZAbXO-R1NWGzCeNCnbZzNFts?e=QxHsac&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQDzL9_5mXl7S6w0hn2M3gOWAXx9aJ5U7wlwTFdANePg8bM?e=WU9b9a&download=1' },
+  { title: "Días Enteros", url: "https://1drv.ms/u/c/01a414479ed4a10f/IQB3PiAzcleLSrQ9YmrrZgMcATgUTAdvp4G_wL4YpGvAN8A?e=4X2MfV&download=1", lrc: 'https://1drv.ms/u/c/01a414479ed4a10f/IQBCrxYwA5d0Sbv_gNMYXzXSAcRRGnd1-ay0N_l0avvDWTw?e=PS7uK3&download=1' },
 ];
+// Letras LRC incorporadas en el propio HTML para evitar bloqueos CORS de OneDrive.
+const lyricsByTitle = {"Sigo Tu Esencia":"[ti: Sigo Tu Esencia]\r\n[ar: El Chito]\r\n[al: El Despertar de la Carretera]\r\n[length: 03:39.840]\r\n[tool: LRC Maker https://lrc-maker.github.io]\r\n[00:00.000] ♫\r\n[00:31.071] Rastrearé el mapa de tus nervios,\r\n[00:37.663] Encontraré el centro de tus proverbios\r\n[00:45.000] Te observaré hasta quebrar tu divinidad\r\n[00:52.215] ¡No hay escape de este impulso animal!\r\n[00:57.430] ♫\r\n[01:00.106] ¡Sigo tu esencia entre la multitud!\r\n[01:07.322] ¡Luces que ciegan con intensidad!\r\n[01:13.791] ¡Encuentro en ti la actitud...\r\n[01:21.118] ...más primaria de la humanidad!\r\n[01:26.128] ♫\r\n[01:43.415] Miradas que profanan el acero de tu cuero\r\n[01:46.925] Rasgando las costuras de las entrañas...\r\n[01:50.497] ¡Rompe la castidad de tu duelo!\r\n[01:56.962] Saciando de gemidos al silencio... tacaño.\r\n[02:01.290] ¡Devorarte el resto del año!\r\n[02:06.462] ¡Devorarte! ¡Devorarte!\r\n[02:11.017] ♫\r\n[02:41.594] ¡Sigo tu esencia entre la multitud!\r\n[02:48.819] ¡Luces que ciegan con intensidad!\r\n[02:55.691] ¡Encuentro en ti la actitud...\r\n[03:02.519] ...más primaria de la humanidad!\r\n[03:08.045] ♫\r\n[03:09.293] ¡Amándote!\r\n[03:12.845] ¡Devorándote!\r\n[03:16.023] ¡Oh, sí... SÍIIII!\r\n[03:21.683] ¡AHORA! ¡AHORA! ¡AHORA!\r\n[03:31.029] ♫","Sin Valor":"[ti: Sin Valor]\n[ar: El Chito]\n[al: El Despertar de la Carretera]\n[length: 04:35.840]\n[tool: LRC Maker https://lrc-maker.github.io]\n[00:00.000] ♫\n[00:38.338] Anhelo el cuero frío, la fuerza del caimán\n[00:43.590] Buscando en el desierto el dogma del chamán.\n[00:59.817] Mi paso es incierto, soy un ciego en el umbral,\n[01:05.256] Buscando en el rito... un valor que no es real.\n[01:12.137] ♫\n[01:15.926] Comprender lo que siento en este incendio.\n[01:21.032] Aprender a no quemarme en su interior.\n[01:25.729] Soy un extraño en la ciudad del sentimiento,\n[01:31.984] Un errante buscando un salvador.\n[01:35.850] ♫\n[01:39.178] ¡No quiero perder tu corazón!\n[01:49.990] ¡Solo quiero alcanzar tu perdón!\n[01:59.321] Por el silencio que mi boca encadenó,\n[02:04.774] Por este miedo que mi voz... asesinó.\n[02:11.446] ♫\n[02:54.461] Por no decirte cuánto te quiero,\n[02:59.235] Por no decirte que en tu ausencia muero.\n[03:05.090] Por un beso que sea el fin del mundo,\n[03:09.956] Locamente enamorado... moribundo.\n[03:21.695] ¡No quiero perder tu corazón!\n[03:32.425] ¡Solo quiero alcanzar tu perdón!\n[03:41.796] Por el silencio que mi boca encadenó,\n[03:47.227] Por este miedo que mi voz... ¡asesinó!\n[03:59.446] ♫\n[04:02.412] Fuerza de caimán... dame la fuerza.\n[04:08.071] Sabiduría de chamán... muéstrame el camino.\n[04:13.679] Sin valor.\n[04:16.365] ♫","Animales":"[ti: Animales]\r\n[ar: El Chito]\r\n[al: El Despertar de la Carretera]\r\n[length: 03:39.880]\r\n[tool: LRC Maker https://lrc-maker.github.io]\r\n[00:00.000] ♫\r\n[00:28.775] Niños salvajes que olvidaron dormir,\r\n[00:34.440] padres en vigilia que los ven sucumbir.\r\n[00:39.207] La locura ha llegado al reino animal,\r\n[00:44.958] Esto es lo que les hemos enseñado...\r\n[00:50.491] Ya no quieren su vida normal,\r\n[00:55.028] ansían el poder, la gloria, lo añorado.\r\n[00:59.932] ♫\r\n[01:01.851] Animales... aullando sin parar\r\n[01:07.056] Animales...  corriendo sin cesar.\r\n[01:15.386]\r\n[01:24.772] Se abalanzarán nubes de aves contra las ciudades,\r\n[01:30.746] Nosotros seremos la ofrenda en sangrientos rituales.\r\n[01:36.712] El León reclama su trono y ser rey,\r\n[01:41.658] los perros ahora son nuestro amo y ley.\r\n[01:46.532] ♫\r\n[01:48.429] Mira cómo arden nuestros cuerpos,\r\n[01:53.009] en un reino sin moral, ¡sin dueño!\r\n[01:59.798] ♫\r\n[02:38.062] Las jaulas serán nuestros... hogares.\r\n[02:43.399] Donde nos volveremos fieros...\r\n[02:46.812] ♫\r\n[02:49.129] ¡Irracionales!\r\n[02:51.234] ♫\r\n[02:52.193] Animales... aullando sin parar.\r\n[02:57.437] Animales... corriendo sin cesar.\r\n[03:04.519] ♫\r\n[03:08.361] ¡Corre!\r\n[03:12.687] El reino animal...\r\n[03:15.450] ♫\r\n[03:16.330] ¡Sin ley! \r\n[03:22.010] ¡Sin dueño!\r\n[03:24.010] ♫","Días Enteros":"[ti: Días Enteros]\n[ar: El Chito]\n[al: El Despertar de la Carretera]\n[length: 03:37.920]\n[tool: LRC Maker https://lrc-maker.github.io]\n[00:00.000] ♫\n[00:24.674] Días enteros sin poder andar\n[00:30.399] Noches oscuras sin querer soñar\n[00:35.527] Un viejo pasado de sangre y honor\n[00:42.007] Frente a un futuro sin paz ni amor\n[00:46.665] ¡No te escondas!\n[00:50.015] El lobo sabe dónde encontrarte\n[00:55.767] ¡No escapes!\n[00:58.385] El pastor ansía atraparte\n[01:04.810] Es el sino cruel de una vida herida\n[01:10.612] En un mundo muerto, sin salida...\n[01:17.980] ♫\n[01:51.462] El miedo acecha, no tiene final\n[01:55.663] La sociedad abraza su rito mortal\n[02:02.956] Los niños corren la misma suerte\n[02:07.233] Bajo la marca de una fría muerte\n[02:13.382] Sin que el padre pueda evitar... el final.\n[02:20.691] ♫\n[02:23.104] El bosque está en llamas, amigo...\n[02:28.553] ¿Oyes los pasos sobre las hojas secas?\n[02:34.100] Nadie escapa al guardián del laberinto.\n[02:43.439] ♫\n[03:04.327] Mundo sin camino...\n[03:08.241] Sin camino...\n[03:10.423] El lobo está cerca...\n[03:14.467] Tan Cerca...\n[03:18.808] ♫","Eres Tú":"[ti: Eres Tú]\r\n[ar: El Chito]\r\n[al: El Despertar de la Carretera]\r\n[length: 04:06.840]\r\n[tool: LRC Maker https://lrc-maker.github.io]\r\n[00:00.000] ♫\r\n[00:23.134] Eres tú mi rastro al caminar,\r\n[00:28.143] la risa loca que quiero desatar.\r\n[00:34.284] Tus ojos embriagan los míos,\r\n[00:39.343] un naufragio ciego frente al mar.\r\n[00:44.953] Aunque se queden secos los ríos,\r\n[00:50.620] no habrá otra orilla que pueda nombrar.\r\n[00:55.555] ♫\r\n[00:57.172] ¡Es contigo! En el festín de la existencia.\r\n[01:02.409] ¡Es contigo! En el centro del jardín.\r\n[01:08.160] Bebiendo el sol hasta que el tiempo se detenga,\r\n[01:13.578] Amándote hasta que el lenguaje llegue a su fin.\r\n[01:20.482] ♫\r\n[01:31.403] Eres tú mi rastro al caminar,\r\n[01:36.657] la risa loca que quiero desatar.\r\n[01:41.519] Tus brazos se despliegan como alas,\r\n[01:47.353] pero no te dejaré partir.\r\n[01:52.239] Si no soy capaz de ser quien las ata,\r\n[01:58.520] me queda el sueño para insistir.\r\n[02:03.835] ♫\r\n[02:04.371] Oh!!... SI!!!\r\n[02:06.156] ♫\r\n[02:28.659] Regálame solo una sonrisa...\r\n[02:34.032] el eco de una última palabra.\r\n[02:39.394] Deja que el pecho se abra,\r\n[02:42.733] y me atraviese el desierto de tu brisa.\r\n[02:49.711] ♫\r\n[02:52.029] Eres la visión de mis desvelos,\r\n[02:54.789] la musa que incendia el pensamiento.\r\n[02:57.559] Abandonemos estos viejos cimientos,\r\n[03:00.599] para ser los dueños de este incendio.\r\n[03:03.244] ♫\r\n[03:04.195] Pero sé que eres un reino inalcanzable,\r\n[03:08.642] cambio el cielo por el humo de este bar.\r\n[03:14.182] Para soñar lo inevitable,\r\n[03:17.686] y en tu voz... volverme a encontrar.\r\n[03:26.520] ♫\r\n[03:29.147] Vivir... soñar... encontrarte en el bar.....\r\n[03:34.451] encontrarte en el bar.....\r\n[03:41.879] ♫","Es el Sino de la Vida":"[ti: Es el Sino de la Vida]\r\n[ar: El Chito]\r\n[al: El Despertar de la Carretera]\r\n[length: 03:21.680]\r\n[tool: LRC Maker https://lrc-maker.github.io]\r\n[00:00.000] ♫\r\n[00:23.443] Con la noche... y su oscuridad.\r\n[00:29.051] Con la vida... y su soledad.\r\n[00:34.374] Con la muerte como amigo...\r\n[00:38.214] Con la amistad... como enemigo.\r\n[00:43.871] ♫\r\n[00:46.831] ¡Los peces bailan sobre el mar!\r\n[00:51.781] Esperando poder escapar...\r\n[00:55.822] Los pájaros vuelan sobre el cielo...\r\n[01:00.034] Como único... único consuelo.\r\n[01:04.031] ♫\r\n[01:07.789] Y los hombres quieren huir.\r\n[01:10.769] De sus tierras evadir...\r\n[01:13.345] ¡Arrasando lo que pisan!\r\n[01:18.196] Destrozando su guarida...\r\n[01:20.916] Es el sino de la vida...\r\n[01:23.586] Un futuro al que humillan.\r\n[01:26.963] ♫\r\n[01:36.723] Saldrá de nuestros calvarios...\r\n[01:41.210] Las almas de los desesperados.\r\n[01:47.418] Desde los pueblos más Arios...\r\n[01:51.518] Hasta los barrios... ¡Marginados!\r\n[01:57.488] ♫\r\n[02:12.537] ¡VIDA! ¡MUERTE! ¡EL FIN!\r\n[02:19.028] ♫\r\n[03:01.322] Es el sino.... de la vida......\r\n[03:09.826] ♫","Fusionados":"[ti: Fusionados]\r\n[ar: El Chito]\r\n[al: El Despertar de la Carretera]\r\n[length: 03:39.080]\r\n[tool: LRC Maker https://lrc-maker.github.io]\r\n[00:00.000] ♫\r\n[00:25.586] Fusionados, siendo uno.\r\n[00:28.838] Fusionados, siendo uno.\r\n[00:32.163] Fusionados en un mismo latido.\r\n[00:37.780] Nos adentramos en el trance del salón,\r\n[00:45.427] Con un ejército sin ritmo, sin ilusión.\r\n[00:48.207] Fusionados, siendo uno.\r\n[00:51.634] Fusionados, siendo uno.\r\n[00:55.010] Un ejército sumiso.\r\n[00:59.483] ♫\r\n[01:01.040] Fusionados, siendo uno.\r\n[01:04.408] Fusionados, siendo uno.\r\n[01:07.221] Resuena en el aire nuestro latido.\r\n[01:10.610] En este templo oscuro de lo prohibido.\r\n[01:15.490] ♫\r\n[01:44.359] Fusionados, siendo uno.\r\n[01:47.410] Fusionados, siendo uno.\r\n[01:50.673] Fusionados en un mismo latido.\r\n[01:57.842] La música deja de sonar....el club entra en trance.\r\n[02:03.356] Nos fundimos en una misma nota... en un eterno romance.\r\n[02:11.356] Los soldados... sonámbulos de la noche.\r\n[02:15.896] Bailan al son de nuestros acordes.\r\n[02:20.056] Fusionados en un mismo latido.\r\n[02:25.539] ♫\r\n[03:00.858] Fusionados, siendo uno.\r\n[03:03.194] Fusionados, siendo uno.\r\n[03:06.665] Fusionados en un mismo latido.\r\n[03:12.393] En la pista de baile... un latido.\r\n[03:17.291] En el templo... de lo prohibido.\r\n[03:23.109] ♫","No Pares":"[ti: No Pares]\n[ar: El Chito]\n[al: El Despertar de la Carretera]\n[length: 03:57.720]\n[tool: LRC Maker https://lrc-maker.github.io]\n[00:00.000] ♫\n[00:22.167] Cuando no puedas escapar,\n[00:27.034] Las ratas te seguirán,\n[00:31.681] Las calles se estrecharán,\n[00:36.136] Las sombras te devorarán.\n[00:39.591] ♫\n[00:42.858] NO TE PREOCUPES, NO TE PARES!!!\n[00:47.373] NO TE PREOCUPES, NO PARES!!!\n[00:51.379]\n[00:53.233] No te pares,\n[00:55.220] Aunque las mariposas no sepan volar\n[01:02.487] No te preocupes,\n[01:05.122] Aunque los necios no aprendan a amar.\n[01:11.010] ♫\n[01:12.424] NO TE PREOCUPES, NO TE PARES!!!\n[01:17.267] NO TE PREOCUPES, NO PARES!!!\n[01:21.681] ♫\n[01:41.131] Cuando no puedas escapar,\n[01:44.964] Una mano amiga te guiará.\n[01:49.563] La gente sin corazón se frenará,\n[01:54.730] Ya nadie te puede parar.\n[01:59.379] ♫\n[02:26.834] NO TE PREOCUPES, NO TE PARES!!!\n[02:31.817] NO TE PREOCUPES, NO PARES!!!\n[02:36.450] NO TE PREOCUPES!!!\n[02:40.795] NO TE PREOCUPES, NO TE PARES!!!\n[02:45.072] NO PARES!!!\n[02:48.357] ♫\n[03:07.054] No te pares,\n[03:09.934] Llegaras a la tierra del amor,\n[03:14.433] No te preocupes,\n[03:18.407] Viajaras sin ningún temor.\n[03:23.206] NO TE PREOCUPES, NO TE PARES!!!\n[03:28.292] NO TE PREOCUPES, NO PARES!!!\n[03:36.428] NO PARES!!!\n[03:38.911] NO PARES!!!\n[03:43.812] NO PARES!!!\n[03:45.412] ♫","Nuestros Caminos":"[ti: Nuestros Caminos]\r\n[ar: El Chito]\r\n[al: El Despertar de la Carretera]\r\n[length: 03:57.960]\r\n[tool: LRC Maker https://lrc-maker.github.io]\r\n[00:00.000] ♫\r\n[00:27.324] Hace tiempo que te he estado buscando,\r\n[00:31.615] Hace tiempo que no estas a mi lado.\r\n[00:35.768] Nuestros caminos se han acercado\r\n[00:40.055] Nuestros caminos se han alejado\r\n[00:44.198] ♫\r\n[00:53.502] He admitido que me dejastes\r\n[00:58.410] No creo que me olvidases\r\n[01:02.419] Nuestros caminos se han acercado\r\n[01:06.724] Nuestros caminos se han alejado\r\n[01:12.542] ♫\r\n[01:28.643] Nuestros caminos se han acercado\r\n[01:36.979] Nuestros caminos se han alejado\r\n[01:47.111] ♫\r\n[02:03.819] Nuestros caminos se han acercado\r\n[02:12.138] Nuestros caminos se han alejado\r\n[02:22.160] ♫\r\n[02:38.678] Era un verdadero amor...\r\n[02:42.938] ♫\r\n[02:58.550] Quiero pensar que me amaste\r\n[03:02.930] Quiero soñar en besarte\r\n[03:06.411] Te quiero amar y no soñar\r\n[03:10.358] Te quiero besar y no pensar.\r\n[03:19.406] ♫\r\n[03:32.096] ¡Oh...Sí!\r\n[03:34.482] ♫\r\n[03:40.877] Era un verdadero amor...\r\n[03:44.927] ♫","Quemas":"[length: 03:27.960]\r\n[tool: LRC Maker https://lrc-maker.github.io]\r\n[00:00.000] ♫\r\n[00:21.637] Dices que el fuego devora tu piel,\r\n[00:25.570] que habitas en el centro de un volcán.\r\n[00:29.753] Me invitas al banquete de tu incendio,\r\n[00:34.258] a las lujurias que se arrastran por tus delirios.\r\n[00:39.919] Quemas... lo huelo en el aire viciado,\r\n[00:44.431] Siento el calor de un sol apagado.\r\n[00:49.230] ♫\r\n[00:57.250] Pero estás fría, oh, tan fría...\r\n[01:02.174] Una mascara de cera...\r\n[01:06.948] en la hoguera de la corte.\r\n[01:16.624] Quemas... Caricias aprendidas....\r\n[01:21.825] Un maniquí abandonado en la orilla de la noche.\r\n[01:28.796] ♫\r\n[01:53.748] Quemas.... Un roce ensayado...\r\n[01:57.798] Un encuentro de espejos en un paredon.\r\n[02:02.062] No hay fuego aquí, solo un eco de pasion.\r\n[02:06.869] Un truco de luces en un teatro vacío.\r\n[02:12.781] ♫\r\n[02:16.056] Pero estás fría, oh, tan fría...\r\n[02:21.117] Una mascara de cera...\r\n[02:25.800] en la hoguera de la corte.\r\n[02:35.558] Quemas... Caricias aprendidas....\r\n[02:40.612] Un maniquí abandonado en la orilla de la noche.\r\n[02:49.522] Quemas.... quemas....\r\n[02:55.930] ♫"};
+
 const audio=document.getElementById('player');
 let current=-1;
+let lyricLines=[];
+let activeLyricIndex=-1;
+let lyricRequestToken=0;
+function parseLrc(text){
+  const lines=[];
+  for(const raw of text.replace(/^\uFEFF/,'').split(/\r?\n/)){
+    const matches=[...raw.matchAll(/\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\]/g)];
+    const lyric=raw.replace(/\[[^\]]+\]/g,'').trim();
+    for(const m of matches){
+      const fraction=m[3]||'0';
+      const hundredths=fraction.length===1?Number(fraction)*10:fraction.length===2?Number(fraction):Number(fraction)/10;
+      lines.push({time:Number(m[1])*60+Number(m[2])+hundredths/100,text:lyric});
+    }
+  }
+  return lines.sort((a,b)=>a.time-b.time);
+}
+function renderLyrics(){
+  const box=document.getElementById('lyricsContent');
+  if(!lyricLines.length){box.innerHTML='<p class="lyrics-empty">No se han encontrado líneas con marcas de tiempo en este archivo LRC.</p>';return;}
+  box.innerHTML='<div class="lyrics-spacer"></div>'+lyricLines.map((line,i)=>`<div class="lyrics-line" data-lyric-index="${i}">${escapeLyrics(line.text)||'♪'}</div>`).join('')+'<div class="lyrics-spacer"></div>';
+  box.scrollTop=0;
+  activeLyricIndex=-1;
+  syncLyrics();
+}
+function escapeLyrics(value){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function loadLyrics(i){
+  const token=++lyricRequestToken;
+  lyricLines=[];activeLyricIndex=-1;
+  const box=document.getElementById('lyricsContent');
+  document.getElementById('lyricsTrackName').textContent='♪';
+  box.innerHTML='<p class="lyrics-empty">Cargando letra…</p>';
+  const text=lyricsByTitle[tracks[i].title];
+  if(typeof text!=='string'){
+    box.innerHTML='<p class="lyrics-empty">No hay letra incorporada para esta canción.</p>';
+    return;
+  }
+  if(token!==lyricRequestToken)return;
+  lyricLines=parseLrc(text);
+  renderLyrics();
+  if(!lyricLines.length){
+    box.innerHTML='<p class="lyrics-empty">El archivo de letra no contiene líneas con marcas de tiempo válidas.</p>';
+  }
+}
+let userScrollUntil=0,userScrollTimer=null;
+function scrollToLyric(el,instant){
+  const box=document.getElementById('lyricsContent');
+  if(!box||!box.clientHeight)return;
+  const top=el?el.offsetTop-box.clientHeight/2+el.offsetHeight/2:0;
+  box.scrollTo({top:Math.max(0,top),behavior:instant?'instant':'smooth'});
+}
+function syncLyrics(){
+  if(!lyricLines.length)return;
+  const t=audio.currentTime||0;
+  let idx=-1;
+  for(let i=0;i<lyricLines.length;i++){if(lyricLines[i].time<=t)idx=i;else break;}
+  if(idx===activeLyricIndex)return;
+  activeLyricIndex=idx;
+  document.querySelectorAll('.lyrics-line.active').forEach(el=>el.classList.remove('active'));
+  const el=idx>=0?document.querySelector(`[data-lyric-index="${idx}"]`):null;
+  if(el)el.classList.add('active');
+  document.getElementById('lyricsTrackName').textContent=(idx>=0&&lyricLines[idx].text)||'♪';
+  if(Date.now()>=userScrollUntil)scrollToLyric(el);
+}
+// Si el usuario desplaza la letra a mano, se pausa el seguimiento 4 s
+(function(){
+  const box=document.getElementById('lyricsContent');
+  ['wheel','touchmove','pointerdown'].forEach(ev=>box.addEventListener(ev,()=>{
+    userScrollUntil=Date.now()+4000;
+    clearTimeout(userScrollTimer);
+    userScrollTimer=setTimeout(()=>scrollToLyric(document.querySelector('.lyrics-line.active')),4000);
+  },{passive:true}));
+  // Al desplegar el panel, colocar la letra en la linea actual
+  document.getElementById('lyricsPanel').addEventListener('toggle',e=>{
+    if(e.target.open){userScrollUntil=0;requestAnimationFrame(()=>scrollToLyric(document.querySelector('.lyrics-line.active'),true));}
+  });
+})();
 function fmt(s){if(isNaN(s)||s===undefined)return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`}
 function renderList(){document.getElementById('tracklist').innerHTML=tracks.map((t,i)=>`<div class="track" id="track${i}" onclick="loadTrack(${i})"><div class="eq"><span></span><span></span><span></span></div><div class="loading"></div><div class="track-num">${i+1}</div><div class="track-info"><div class="track-name">${t.title}</div></div><div class="track-dur" id="dur${i}">--:--</div></div>`).join('')}
 function setActive(i){document.querySelectorAll('.track').forEach(el=>el.classList.remove('active','playing','buffering'));if(i>=0){document.getElementById(`track${i}`).classList.add('active');document.getElementById(`track${i}`).scrollIntoView({behavior:'smooth',block:'nearest'})}document.getElementById('npTitle').textContent=i>=0?tracks[i].title:'—';document.getElementById('npIndex').textContent=i>=0?`${i+1} de ${tracks.length}`:'—'}
-function loadTrack(i){current=i;setActive(i);document.getElementById(`track${i}`).classList.add('buffering');audio.src=tracks[i].url;audio.volume=document.getElementById('volume').value;audio.load();audio.play().catch(()=>{})}
+function showAudioStatus(message,isError=false){const el=document.getElementById('audioStatus');if(el){el.textContent=isError?message:'';el.style.color='#e07060'}}
+function loadTrack(i){current=i;setActive(i);loadLyrics(i);document.getElementById(`track${i}`).classList.add('buffering');showAudioStatus('Conectando con OneDrive…');audio.src=tracks[i].url;audio.volume=document.getElementById('volume').value;audio.load();audio.play().catch(err=>{showAudioStatus('No se ha podido iniciar la reproducción. Pulsa ▶ para intentarlo. Si continúa, revisa que el archivo esté compartido con acceso mediante enlace.',true)})}
 function togglePlay(){if(current<0){loadTrack(0);return}if(audio.paused)audio.play();else audio.pause()}
 function prev(){if(current>0)loadTrack(current-1)}
 function next(){if(current<tracks.length-1)loadTrack(current+1)}
 function setVolume(v){audio.volume=v}
-audio.addEventListener('playing',()=>{document.getElementById('iconPlay').style.display='none';document.getElementById('iconPause').style.display='';const el=document.getElementById(`track${current}`);if(el){el.classList.remove('buffering');el.classList.add('playing')}});
+audio.addEventListener('playing',()=>{showAudioStatus('Reproduciendo desde OneDrive.');document.getElementById('iconPlay').style.display='none';document.getElementById('iconPause').style.display='';const el=document.getElementById(`track${current}`);if(el){el.classList.remove('buffering');el.classList.add('playing')}});
 audio.addEventListener('pause',()=>{document.getElementById('iconPlay').style.display='';document.getElementById('iconPause').style.display='none';const el=document.getElementById(`track${current}`);if(el)el.classList.remove('playing')});
-audio.addEventListener('timeupdate',()=>{const pct=audio.duration?(audio.currentTime/audio.duration)*100:0;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('timeCurrent').textContent=fmt(audio.currentTime);document.getElementById('timeTotal').textContent=fmt(audio.duration)});
+audio.addEventListener('error',()=>{const el=document.getElementById(`track${current}`);if(el)el.classList.remove('buffering','playing');showAudioStatus('Error al cargar el audio de OneDrive. Comprueba el permiso “Cualquier persona con el vínculo” y prueba el enlace en una pestaña nueva.',true)});
+audio.addEventListener('timeupdate',()=>{syncLyrics();const pct=audio.duration?(audio.currentTime/audio.duration)*100:0;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('timeCurrent').textContent=fmt(audio.currentTime);document.getElementById('timeTotal').textContent=fmt(audio.duration)});
 audio.addEventListener('loadedmetadata',()=>{document.getElementById(`dur${current}`).textContent=fmt(audio.duration);document.getElementById('timeTotal').textContent=fmt(audio.duration)});
 audio.addEventListener('ended',()=>{if(current<tracks.length-1)loadTrack(current+1);else{document.getElementById('iconPlay').style.display='';document.getElementById('iconPause').style.display='none'}});
 audio.addEventListener('waiting',()=>{const el=document.getElementById(`track${current}`);if(el){el.classList.remove('playing');el.classList.add('buffering')}});
@@ -156,7 +263,7 @@ document.getElementById('progressWrap').addEventListener('click',(e)=>{if(!audio
 function preloadDurations(){tracks.forEach((t,i)=>{const a=new Audio();a.preload='metadata';a.src=t.url;a.addEventListener('loadedmetadata',()=>{t.duration=a.duration;const el=document.getElementById(`dur${i}`);if(el)el.textContent=fmt(a.duration)})})}
 renderList();
 preloadDurations();
-window.addEventListener('load',()=>loadTrack(0));
+window.addEventListener('load',()=>{current=0;setActive(0);loadLyrics(0);audio.src=tracks[0].url;audio.load();showAudioStatus('');});
 </script>
 </body>
 </html>
