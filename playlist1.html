@@ -200,7 +200,7 @@ function loadLyrics(i){
   box.innerHTML='<p class="lyrics-empty">Cargando letra…</p>';
   const text=lyricsByTitle[tracks[i].title];
   if(typeof text!=='string'){
-    box.innerHTML='<p class="lyrics-empty">No hay letra incorporada para esta canción.</p>';
+    refreshLyricsFromOneDrive(i,token,null);
     return;
   }
   if(token!==lyricRequestToken)return;
@@ -208,6 +208,59 @@ function loadLyrics(i){
   renderLyrics();
   if(!lyricLines.length){
     box.innerHTML='<p class="lyrics-empty">El archivo de letra no contiene líneas con marcas de tiempo válidas.</p>';
+  }
+  refreshLyricsFromOneDrive(i,token,text);
+}
+// Intenta leer el .lrc directamente de OneDrive; si falla (CORS, permisos, red) se mantiene la letra incorporada.
+const remoteLrcCache={};
+function oneDriveShareId(url){
+  const clean=url.replace(/([?&])download=1&?/,'$1').replace(/[?&]$/,'');
+  return 'u!'+btoa(clean).replace(/=+$/,'').replace(/\//g,'_').replace(/\+/g,'-');
+}
+async function fetchOneDriveText(shareUrl){
+  const base='https://api.onedrive.com/v1.0/shares/'+oneDriveShareId(shareUrl);
+  try{
+    const meta=await fetch(base+'/root').then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()});
+    const dl=meta['@content.downloadUrl'];
+    if(dl){const r=await fetch(dl);if(r.ok)return await r.text();}
+  }catch(e){}
+  const r=await fetch(base+'/root/content');
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return await r.text();
+}
+// Carpeta del repositorio (junto al HTML) donde viven los .lrc: letras/<título>.lrc
+const LRC_FOLDER='letras/';
+async function fetchLrcText(t){
+  try{
+    const r=await fetch(LRC_FOLDER+encodeURIComponent(t.title)+'.lrc',{cache:'no-cache'});
+    if(r.ok){
+      const txt=await r.text();
+      if(/\[\d{1,2}:\d{2}/.test(txt)){console.info('[Letras] Cargada desde GitHub:',t.title);return txt;}
+    }
+  }catch(e){}
+  if(!t.lrc)throw new Error('sin letra remota');
+  const txt=await fetchOneDriveText(t.lrc);
+  console.info('[Letras] Cargada desde OneDrive:',t.title);
+  return txt;
+}
+async function refreshLyricsFromOneDrive(i,token,embedded){
+  const t=tracks[i];
+  try{
+    let text=remoteLrcCache[t.title];
+    if(text===undefined){
+      text=await fetchLrcText(t);
+      remoteLrcCache[t.title]=text;
+    }
+    if(token!==lyricRequestToken||text===embedded)return;
+    const lines=parseLrc(text);
+    if(!lines.length)throw new Error('LRC sin marcas de tiempo válidas');
+    lyricLines=lines;
+    renderLyrics();
+  }catch(err){
+    console.warn('[Letras] No se pudo leer la letra remota, se usa la incorporada:',t.title,err);
+    if(token===lyricRequestToken&&typeof embedded!=='string'){
+      document.getElementById('lyricsContent').innerHTML='<p class="lyrics-empty">No hay letra disponible para esta canción.</p>';
+    }
   }
 }
 let userScrollUntil=0,userScrollTimer=null;
