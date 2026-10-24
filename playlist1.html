@@ -76,6 +76,10 @@ audio{display:none}
 .lyrics-content{position:relative;border-top:1px solid rgba(232,160,32,.18);padding:16px 18px 20px;max-height:340px;overflow:auto;text-align:center;scroll-behavior:smooth}
 .lyrics-spacer{height:120px}
 .lyrics-now{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px;font-weight:500;letter-spacing:0;color:var(--accent)}
+.lyrics-preview{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.lyrics-preview .lyrics-now{flex:none}
+.lyrics-next{display:block;min-height:1.4em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:400;letter-spacing:0;line-height:1.4;color:var(--muted)}
+.lyrics-panel[open] .lyrics-next{display:none}
 .lyrics-line{padding:7px 4px;color:var(--muted);font-size:15px;line-height:1.5;transition:color .18s,transform .18s}
 .lyrics-line.active{color:var(--accent);font-weight:700;transform:scale(1.025)}
 .lyrics-empty{padding:12px 4px;color:var(--muted);font-size:13px;line-height:1.6}
@@ -136,7 +140,7 @@ audio{display:none}
     </div>
   </div>
   <details class="lyrics-panel" id="lyricsPanel">
-    <summary><span id="lyricsTrackName" class="lyrics-now">♪</span></summary>
+    <summary><span class="lyrics-preview"><span id="lyricsTrackName" class="lyrics-now">♪</span><span id="lyricsNext" class="lyrics-next"></span></span></summary>
     <div class="lyrics-content" id="lyricsContent" aria-live="polite">
       <p class="lyrics-empty">Cargando letra…</p>
     </div>
@@ -164,6 +168,7 @@ const tracks=[
 const audio=document.getElementById('player');
 const lyricsBox=document.getElementById('lyricsContent');
 const lyricsNow=document.getElementById('lyricsTrackName');
+const lyricsNext=document.getElementById('lyricsNext');
 let current=-1,lyricLines=[],activeLyricIndex=-1,lyricRequestToken=0;
 let userScrollUntil=0,userScrollTimer=null;
 
@@ -195,6 +200,7 @@ async function loadLyrics(i){
   const title=tracks[i].title;
   lyricLines=[];activeLyricIndex=-1;
   lyricsNow.textContent='♪';
+  lyricsNext.textContent='';
   setLyricsMessage('Cargando letra…');
   try{
     const r=await fetch(LRC_FOLDER+encodeURIComponent(title)+'.lrc',{cache:'no-cache'});
@@ -225,6 +231,8 @@ function syncLyrics(){
   const el=idx>=0?document.querySelector(`[data-lyric-index="${idx}"]`):null;
   if(el)el.classList.add('active');
   lyricsNow.textContent=(idx>=0&&lyricLines[idx].text)||'♪';
+  let nx='';for(let j=idx+1;j<lyricLines.length;j++){if(lyricLines[j].text){nx=lyricLines[j].text;break;}}
+  lyricsNext.textContent=nx;
   if(Date.now()>=userScrollUntil)scrollToLyric(el);
 }
 // Si el usuario desplaza la letra a mano, se pausa el seguimiento 4 s
