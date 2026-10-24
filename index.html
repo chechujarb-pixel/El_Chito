@@ -35,6 +35,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .c4 .card-num{color:#d47a00} .c4 .card-title{color:#f5b041}
 .c5 .card-num{color:#d63a52} .c5 .card-title{color:#f2b3bc}
 .c6 .card-num{color:#9468e8} .c6 .card-title{color:#e6dcf8}
+.lyrics-btn{display:flex;align-items:center;gap:16px;margin-top:20px;padding:20px;border-radius:14px;text-decoration:none;color:#f0e8d8;background:linear-gradient(135deg,#1f1609,#0f0b06);border:1px solid rgba(232,160,32,0.35);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s}
+.lyrics-btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.5);border-color:rgba(232,160,32,0.7)}
+.lyrics-btn .lb-icon{flex:none;width:44px;height:44px;border-radius:50%;background:rgba(232,160,32,0.12);display:flex;align-items:center;justify-content:center}
+.lyrics-btn .lb-text{flex:1;min-width:0}
+.lyrics-btn .lb-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:4px;margin-bottom:4px;color:#e8a020;opacity:0.85}
+.lyrics-btn .lb-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1.1;color:#fff}
+.lyrics-btn .lb-meta{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:300;letter-spacing:1px}
 </style>
 </head>
 <body>
@@ -107,6 +114,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="card-arrow"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
     </a>
   </div>
+  <a href="letras.html" class="lyrics-btn">
+    <div class="lb-icon"><svg width="22" height="22" fill="none" stroke="#e8a020" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M2 5.5C4.5 4.5 8 4.5 12 6.5c4-2 7.5-2 10-1V19c-2.5-1-6-1-10 1-4-2-7.5-2-10-1z"/><path d="M12 6.5V20"/></svg></div>
+    <div class="lb-text">
+      <div class="lb-num">LETRAS</div>
+      <div class="lb-title">Libro de letras</div>
+      <div class="lb-meta">Todas las canciones</div>
+    </div>
+  </a>
 </div>
 </body>
 </html>
