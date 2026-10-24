@@ -1,127 +1,157 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Playlist</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Letras | El Chito</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#080808;color:#f0f0f0;font-family:'Barlow',sans-serif;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,200,80,0.06) 0%,transparent 60%);pointer-events:none}
-.container{max-width:480px;margin:0 auto;padding:48px 20px 60px}
-.header{text-align:center;margin-bottom:48px}
-.header-label{font-size:20px;font-weight: bold;letter-spacing:5px;color:#888;margin-bottom:10px}
-.header h1{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:3px;line-height:1;color:#fff}
-.header h1 span{color:#e8a020}
-.header-sub{margin-top:10px;font-size:16px;color:#555;letter-spacing:2px;font-weight:300}
-.cards{display:grid;grid-template-columns:1fr;gap:20px}
-@media (min-width: 768px) {
-  .container{max-width:1080px;}
-  .cards{grid-template-columns:repeat(2,minmax(0,1fr));}
+:root{--ink:#2a2118;--soft:#7a6a52;--paper:#f5eddc;--paper2:#e9dfc6;--bg:#17110c}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Lora,Georgia,serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+.book{flex:1;min-height:0;display:flex;justify-content:center;padding:10px 10px 0}
+.sheet{flex:1;max-width:600px;min-width:0;background:var(--paper);border-radius:6px;overflow:auto;padding:30px 26px 40px;box-shadow:0 8px 28px rgba(0,0,0,.55);-webkit-overflow-scrolling:touch}
+.sheet.blank{background:var(--paper2)}
+#R{display:none}
+@media(min-width:900px){
+  .book{padding:22px 24px 0}
+  #R{display:block}
+  #L{border-radius:6px 0 0 6px;box-shadow:inset -22px 0 24px -22px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.55)}
+  #R{border-radius:0 6px 6px 0;box-shadow:inset 22px 0 24px -22px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.55)}
+  .sheet{padding:38px 40px 46px}
 }
-.card{position:relative;border-radius:14px;overflow:hidden;cursor:pointer;text-decoration:none;display:block;transition:transform 0.2s,box-shadow 0.2s}
-.card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.5)}
-.card img{width:100%;display:block;aspect-ratio:1;object-fit:cover}
-.card-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.1) 50%,transparent 100%)}
-.card-body{position:absolute;bottom:0;left:0;right:0;padding:20px}
-.card-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:4px;margin-bottom:4px;opacity:0.7}
-.card-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1.1}
-.card-meta{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:300;letter-spacing:1px}
-.card-arrow{position:absolute;top:50%;right:20px;transform:translateY(-50%);width:40px;height:40px;background:rgba(255,255,255,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.c1 .card-num{color:#e8a020} .c1 .card-title{color:#fff}
-.c2 .card-num{color:#ff6347} .c2 .card-title{color:#ffa07a}
-.c3 .card-num{color:#9d6ff0} .c3 .card-title{color:#e8e0f8}
-.c4 .card-num{color:#d47a00} .c4 .card-title{color:#f5b041}
-.c5 .card-num{color:#d63a52} .c5 .card-title{color:#f2b3bc}
-.c6 .card-num{color:#9468e8} .c6 .card-title{color:#e6dcf8}
-.lyrics-btn{display:flex;align-items:center;gap:16px;margin-top:20px;padding:20px;border-radius:14px;text-decoration:none;color:#f0e8d8;background:linear-gradient(135deg,#1f1609,#0f0b06);border:1px solid rgba(232,160,32,0.35);transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s}
-.lyrics-btn:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.5);border-color:rgba(232,160,32,0.7)}
-.lyrics-btn .lb-icon{flex:none;width:44px;height:44px;border-radius:50%;background:rgba(232,160,32,0.12);display:flex;align-items:center;justify-content:center}
-.lyrics-btn .lb-text{flex:1;min-width:0}
-.lyrics-btn .lb-num{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:4px;margin-bottom:4px;color:#e8a020;opacity:0.85}
-.lyrics-btn .lb-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1.1;color:#fff}
-.lyrics-btn .lb-meta{font-size:12px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:300;letter-spacing:1px}
+.kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--a,var(--soft));margin-bottom:8px;font-weight:500}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:700;line-height:1.2}
+h1{font-size:34px}
+h2{font-size:28px;margin-bottom:6px}
+.rule{width:44px;height:3px;background:var(--a,var(--soft));border-radius:2px;margin:14px 0 26px}
+.sub{color:var(--soft);font-style:italic;margin-top:4px}
+.stanza{margin:0 0 1.55em}
+.stanza p{font-size:17px;line-height:1.62}
+.nolyr{color:var(--soft);font-style:italic}
+.pn{text-align:center;color:var(--soft);font-size:13px;margin-top:34px}
+.disc{margin-top:24px}
+.disc h3{font-size:19px;color:var(--a);padding-bottom:6px;border-bottom:1px solid rgba(42,33,24,.18);margin-bottom:6px}
+.disc a{display:flex;align-items:baseline;gap:8px;padding:7px 2px;color:var(--ink);text-decoration:none;font-size:16px;cursor:pointer}
+.disc a:hover,.disc a:focus-visible{color:var(--a);outline:none}
+.disc a i{flex:none;font-style:normal;color:var(--soft);font-size:13px;width:2ch;text-align:right}
+.disc a b{flex:1;font-weight:400}
+.disc a u{flex:none;text-decoration:none;color:var(--soft);font-size:13px}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));max-width:1280px;width:100%;margin:0 auto}
+.bar button{background:#2a2016;color:#f0e8d8;border:1px solid #4a3a28;border-radius:999px;padding:10px 16px;font:500 14px Lora,Georgia,serif;cursor:pointer;min-height:44px}
+.bar button:disabled{opacity:.35;cursor:default}
+.bar button:not(:disabled):hover{background:#3a2c1c}
+.bar span{color:#a89878;font-size:13px;text-align:center;flex:1}
+.top{max-width:1280px;width:100%;margin:0 auto;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 0}
+.top a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 16px;color:#f0e8d8;background:#2a2016;border:1px solid #4a3a28;border-radius:999px;text-decoration:none;font:500 14px Lora,Georgia,serif}
+.top a:hover,.top a:focus-visible{background:#3a2c1c;border-color:#e8a020;color:#fff;outline:none}
+@media(min-width:900px){.top{padding:calc(14px + env(safe-area-inset-top,0px)) 24px 0}}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="header-label">COLECCIÓN COMPLETA</div>
-   <img src="caratulas/Logo_Indice.png" alt="El Chito" class="brand-logo" style="width: 70%; height: auto;">
-    <!--<h1>El <span>Chito</span></h1>-->
-    <div class="header-sub">6 álbumes &nbsp;·&nbsp; 61 canciones</div>
-  </div>
-  <div class="cards">
-    <a href="playlist1.html" class="card c1">
-      <img src="caratulas/Despertar.jpg" alt="El Despertar de la Carretera">
-      <div class="card-overlay"></div>
-      <div class="card-body">
-        <div class="card-num">LP 01</div>
-        <div class="card-title">El Despertar de la Carretera</div>
-        <div class="card-meta">10 canciones</div>
-      </div>
-      <div class="card-arrow"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-    </a>
-    <a href="playlist2.html" class="card c2">
-      <img src="caratulas/Camino.jpg" alt="El Camino Chamánico">
-      <div class="card-overlay"></div>
-      <div class="card-body">
-        <div class="card-num">LP 02</div>
-        <div class="card-title">El Camino Chamánico</div>
-        <div class="card-meta">9 canciones</div>
-      </div>
-      <div class="card-arrow"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-    </a>
-    <a href="playlist3.html" class="card c3">
-      <img src="caratulas/Viaje.jpg" alt="El Viaje Interior a la Oscuridad">
-      <div class="card-overlay"></div>
-      <div class="card-body">
-        <div class="card-num">LP 03</div>
-        <div class="card-title">El Viaje Interior a la Oscuridad</div>
-        <div class="card-meta">11 canciones</div>
-      </div>
-      <div class="card-arrow"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-    </a>
-    <a href="playlist4.html" class="card c4">
-      <img src="caratulas/Unplugged.jpg" alt="Unplugged">
-      <div class="card-overlay"></div>
-      <div class="card-body">
-        <div class="card-num">LP 04</div>
-        <div class="card-title">Unplugged</div>
-        <div class="card-meta">12 canciones</div>
-      </div>
-      <div class="card-arrow"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-    </a>
-    <a href="playlist5.html" class="card c5">
-      <img src="caratulas/Unplugged_II.jpg" alt="Unplugged II">
-      <div class="card-overlay"></div>
-      <div class="card-body">
-        <div class="card-num">LP 05</div>
-        <div class="card-title">Unplugged II</div>
-        <div class="card-meta">9 canciones</div>
-      </div>
-      <div class="card-arrow"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-    </a>
-    <a href="playlist6.html" class="card c6">
-      <img src="caratulas/Unplugged_III.jpg" alt="Unplugged III">
-      <div class="card-overlay"></div>
-      <div class="card-body">
-        <div class="card-num">LP 06</div>
-        <div class="card-title">Unplugged III</div>
-        <div class="card-meta">10 canciones</div>
-      </div>
-      <div class="card-arrow"><svg width="18" height="18" fill="white" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
-    </a>
-  </div>
-  <a href="letras.html" class="lyrics-btn">
-    <div class="lb-icon"><svg width="22" height="22" fill="none" stroke="#e8a020" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M2 5.5C4.5 4.5 8 4.5 12 6.5c4-2 7.5-2 10-1V19c-2.5-1-6-1-10 1-4-2-7.5-2-10-1z"/><path d="M12 6.5V20"/></svg></div>
-    <div class="lb-text">
-      <div class="lb-num">LETRAS</div>
-      <div class="lb-title">Libro de letras</div>
-      <div class="lb-meta">Todas las canciones</div>
-    </div>
-  </a>
-</div>
+<header class="top"><a href="index.html">‹ Volver a la colección</a></header>
+<main class="book" id="book"><article class="sheet" id="L"></article><article class="sheet" id="R"></article></main>
+<nav class="bar">
+  <button id="prev">‹ Anterior</button>
+  <button id="idx">Índice</button>
+  <span id="ind"></span>
+  <button id="next">Siguiente ›</button>
+</nav>
+<script>
+const DATA={"discs":[{"n":"El Despertar de la Carretera","a":"#b9770e","tr":[{"t":"Quemas","k":"Quemas"},{"t":"Eres Tú","k":"Eres Tú"},{"t":"Animales","k":"Animales"},{"t":"Sigo Tu Esencia","k":"Sigo Tu Esencia"},{"t":"Nuestros Caminos","k":"Nuestros Caminos"},{"t":"Es el Sino de la Vida","k":"Es el Sino de la Vida"},{"t":"No Pares","k":"No Pares"},{"t":"Fusionados","k":"Fusionados"},{"t":"Sin Valor","k":"Sin Valor"},{"t":"Días Enteros","k":"Días Enteros"}]},{"n":"El Camino Chamánico","a":"#c4222d","tr":[{"t":"Déjame Soñar","k":"Déjame Soñar"},{"t":"La Verdad","k":"La Verdad"},{"t":"Sol Rojo","k":"Sol Rojo"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura"},{"t":"Volver a Nacer","k":"Volver a Nacer"},{"t":"La Gacela","k":"La Gacela"},{"t":"Desesperados","k":"Desesperados"},{"t":"El Ojo del Huracán","k":"En el Ojo del Huracán"},{"t":"Días Enteros – Dirty Blues","k":"Días Enteros - Dirty Blues"}]},{"n":"El Viaje Interior a la Oscuridad","a":"#6b3fc0","tr":[{"t":"En una Noche Azul","k":"En una Noche Azul"},{"t":"El Bosque","k":"El Bosque"},{"t":"Te Llaman","k":"Te Llaman"},{"t":"En el País de las Almas Perdidas","k":"En el País de las Almas Perdidas"},{"t":"El Éxodo","k":"En Éxodo"},{"t":"Urnas de Asfalto","k":"Urnas de Asfalto"},{"t":"Tu Jaula","k":"Tu Jaula"},{"t":"La Casa Desdichada","k":"La Casa Desdichada"},{"t":"El Recuerdo","k":"El Recuerdo"},{"t":"El Velo","k":"El Velo"},{"t":"Almas","k":null,"i":1}]},{"n":"Unplugged","a":"#9a6a3a","tr":[{"t":"Quemas","k":"Quemas - Unplugged"},{"t":"Eres Tú","k":"Eres Tú - Unplugged"},{"t":"Animales","k":"Animales - Unplugged"},{"t":"Sigo Tu Esencia","k":"Sigo Tu Esencia - Unplugged"},{"t":"Nuestros Caminos","k":"Nuestros Caminos - Unplugged"},{"t":"Es el Sino de la Vida","k":"Es el Sino de la Vida - Unplugged"},{"t":"No Pares","k":"No Pares - Unplugged"},{"t":"Fusionados","k":"Fusionados - Unplugged"},{"t":"Sin Valor","k":"Sin Valor - Unplugged"},{"t":"Días Enteros","k":"Días Enteros - Unplugged"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura - Unplugged"},{"t":"El País de las Almas Perdidas","k":"En el País de las Almas Perdidas - Unplugged"}]},{"n":"Unplugged II","a":"#b02a42","tr":[{"t":"El Ojo del Huracán","k":"En el Ojo del Huracán"},{"t":"Déjame Soñar","k":"Déjame Soñar"},{"t":"La Verdad","k":"La Verdad"},{"t":"Sol Rojo","k":"Sol Rojo"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura"},{"t":"Volver a Nacer","k":"Volver a Nacer"},{"t":"La Gacela","k":"La Gacela"},{"t":"Desesperados","k":"Desesperados"},{"t":"Días Enteros – Dirty Blues","k":"Días Enteros - Dirty Blues"}]},{"n":"Unplugged III","a":"#7a4fd0","tr":[{"t":"En una Noche Azul","k":"En una Noche Azul"},{"t":"El Bosque","k":"El Bosque"},{"t":"Te Llaman","k":"Te Llaman"},{"t":"En el País de las Almas Perdidas","k":"En el País de las Almas Perdidas"},{"t":"El Éxodo","k":"En Éxodo"},{"t":"Urnas de Asfalto","k":"Urnas de Asfalto"},{"t":"Tu Jaula","k":"Tu Jaula"},{"t":"La Casa Desdichada","k":"La Casa Desdichada"},{"t":"El Recuerdo","k":"El Recuerdo"},{"t":"El Velo","k":"El Velo"}]}]};
+const LRC_FOLDER='letras/';   // carpeta del repositorio con los .lrc (igual que en las playlists)
+const cache={};
+function parseLrc(text){
+  const st=[[]];
+  for(const raw of text.replace(/^\uFEFF/,'').split(/\r?\n/)){
+    if(!/^\s*\[\d+:\d+/.test(raw))continue;           // salta etiquetas [ti:] [ar:] [al:] [length:]
+    const t=raw.replace(/\[[^\]]*\]/g,'').trim();
+    if(!t||/^[♪♫♬♩\s]+$/.test(t)){if(st[st.length-1].length)st.push([]);}   // nota = separación de estrofa
+    else st[st.length-1].push(t);
+  }
+  return st.filter(s=>s.length);
+}
+function getSong(k){
+  if(!k)return Promise.resolve(null);
+  if(!cache[k])cache[k]=fetch(LRC_FOLDER+encodeURIComponent(k)+'.lrc',{cache:'no-cache'})
+    .then(r=>{if(!r.ok)throw new Error(r.status);return r.text();}).then(parseLrc)
+    .catch(e=>{delete cache[k];console.warn('[Letras] No se pudo cargar',k,e);return undefined;});
+  return cache[k];
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// páginas: 0 = índice; 1.. = una canción por página
+const pages=[{idx:true}];
+DATA.discs.forEach((d,di)=>d.tr.forEach((t,ti)=>pages.push({di,ti,t:t.t,k:t.k,i:t.i})));
+const N=pages.length, wideMQ=matchMedia('(min-width:900px)');
+const L=document.getElementById('L'),R=document.getElementById('R');
+let p=Math.max(0,Math.min(N-1,parseInt(location.hash.slice(1))||0));
+
+function indexPage(){
+  let h='<div class="kicker">El Chito</div><h1>Letras</h1><div class="rule"></div>';
+  let n=0;
+  DATA.discs.forEach((d,di)=>{
+    h+=`<section class="disc" style="--a:${d.a}"><h3>${esc(d.n)}</h3>`;
+    d.tr.forEach((t,ti)=>{n++;h+=`<a tabindex="0" data-go="${n}"><i>${ti+1}</i><b>${esc(t.t)}</b><u>${n}</u></a>`;});
+    h+='</section>';
+  });
+  return h;
+}
+function songPage(i){
+  const pg=pages[i],d=DATA.discs[pg.di];
+  return `<div style="--a:${d.a}"><div class="kicker">${esc(d.n)} · ${pg.ti+1}</div><h2>${esc(pg.t)}</h2><div class="rule"></div><div class="lyr"><p class="nolyr">Cargando letra…</p></div><div class="pn">${i}</div></div>`;
+}
+function lyricsHtml(st,pg){
+  if(st===null)return pg.i?'<p class="nolyr">Instrumental</p>':'<p class="nolyr">Letra pendiente de añadir.</p>';
+  if(st===undefined)return '<p class="nolyr">No se pudo cargar la letra. Comprueba que la página está en el mismo sitio que la carpeta letras/.</p>';
+  return st.map(s=>'<div class="stanza">'+s.map(l=>`<p>${esc(l)}</p>`).join('')+'</div>').join('');
+}
+function fill(el,i){
+  const ok=i<N, tok=(el._tok=(el._tok||0)+1);
+  el.classList.toggle('blank',!ok);
+  el.innerHTML=ok?(i===0?indexPage():songPage(i)):'';
+  el.scrollTop=0;
+  if(ok&&i>0)getSong(pages[i].k).then(st=>{
+    const box=el._tok===tok&&el.querySelector('.lyr');
+    if(box)box.innerHTML=lyricsHtml(st,pages[i]);
+  });
+}
+const lab=i=>i===0?'Índice':i;
+function render(anim){
+  const wide=wideMQ.matches;
+  if(wide)p-=p%2;
+  fill(L,p);
+  if(wide)fill(R,p+1);
+  const step=wide?2:1;
+  document.getElementById('prev').disabled=p<=0;
+  document.getElementById('next').disabled=p+step>=N;
+  document.getElementById('ind').textContent=(!wide&&p===0)?'Índice':(wide&&p+1<N?lab(p)+' – '+lab(p+1):lab(p))+' / '+(N-1);
+  history.replaceState(null,'','#'+p);
+  for(let j=p+step;j<p+step+2&&j<N;j++)getSong(pages[j].k);
+  if(anim)[L,R].forEach(e=>e.animate&&e.animate([{opacity:0,transform:'translateX('+(anim*14)+'px)'},{opacity:1,transform:'none'}],{duration:200,easing:'ease-out'}));
+}
+function go(to,anim){p=Math.max(0,Math.min(N-1,to));render(anim||0);}
+const stepNow=()=>wideMQ.matches?2:1;
+document.getElementById('prev').onclick=()=>go(p-stepNow(),-1);
+document.getElementById('next').onclick=()=>go(p+stepNow(),1);
+document.getElementById('idx').onclick=()=>go(0,-1);
+document.getElementById('book').addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(a)go(+a.dataset.go,1);});
+document.getElementById('book').addEventListener('keydown',e=>{if(e.key==='Enter'){const a=e.target.closest('[data-go]');if(a)go(+a.dataset.go,1);}});
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'&&p+stepNow()<N)go(p+stepNow(),1);
+  else if(e.key==='ArrowLeft'&&p>0)go(p-stepNow(),-1);
+  else if(e.key==='Home')go(0,-1);
+});
+let sx=0,sy=0;
+const bk=document.getElementById('book');
+bk.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+bk.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.6){if(dx<0&&p+stepNow()<N)go(p+stepNow(),1);else if(dx>0&&p>0)go(p-stepNow(),-1);}
+},{passive:true});
+wideMQ.addEventListener('change',()=>render(0));
+window.addEventListener('hashchange',()=>{const h=parseInt(location.hash.slice(1));if(!isNaN(h)&&h!==p)go(h,0);});
+render(0);
+</script>
 </body>
 </html>
