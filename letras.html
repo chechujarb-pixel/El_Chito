@@ -43,9 +43,13 @@ h2{font-size:28px;margin-bottom:6px}
 .bar button:disabled{opacity:.35;cursor:default}
 .bar button:not(:disabled):hover{background:#3a2c1c}
 .bar span{color:#a89878;font-size:13px;text-align:center;flex:1}
+.top{max-width:1280px;width:100%;margin:0 auto;padding:calc(6px + env(safe-area-inset-top,0px)) 14px 0}
+.top a{display:inline-flex;align-items:center;gap:4px;min-height:40px;color:#c9b998;text-decoration:none;font:500 13px Lora,Georgia,serif;letter-spacing:.04em}
+.top a:hover,.top a:focus-visible{color:#e8a020;outline:none}
 </style>
 </head>
 <body>
+<header class="top"><a href="index.html">‹ Volver a la colección</a></header>
 <main class="book" id="book"><article class="sheet" id="L"></article><article class="sheet" id="R"></article></main>
 <nav class="bar">
   <button id="prev">‹ Anterior</button>
@@ -54,7 +58,7 @@ h2{font-size:28px;margin-bottom:6px}
   <button id="next">Siguiente ›</button>
 </nav>
 <script>
-const DATA={"discs":[{"n":"El Despertar de la Carretera","a":"#b9770e","tr":[{"t":"Quemas","k":"Quemas"},{"t":"Eres Tú","k":"Eres Tú"},{"t":"Animales","k":"Animales"},{"t":"Sigo Tu Esencia","k":"Sigo Tu Esencia"},{"t":"Nuestros Caminos","k":"Nuestros Caminos"},{"t":"Es el Sino de la Vida","k":"Es el Sino de la Vida"},{"t":"No Pares","k":"No Pares"},{"t":"Fusionados","k":"Fusionados"},{"t":"Sin Valor","k":"Sin Valor"},{"t":"Días Enteros","k":"Días Enteros"}]},{"n":"El Camino Chamánico","a":"#c4222d","tr":[{"t":"Déjame Soñar","k":"Déjame Soñar"},{"t":"La Verdad","k":"La Verdad"},{"t":"Sol Rojo","k":"Sol Rojo"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura"},{"t":"Volver a Nacer","k":"Volver a Nacer"},{"t":"La Gacela","k":"La Gacela"},{"t":"Desesperados","k":"Desesperados"},{"t":"El Ojo del Huracán","k":"En el Ojo del Huracán"},{"t":"Días Enteros – Dirty Blues","k":"Días Enteros - Dirty Blues"}]},{"n":"El Viaje Interior a la Oscuridad","a":"#6b3fc0","tr":[{"t":"En una Noche Azul","k":"En una Noche Azul"},{"t":"El Bosque","k":"El Bosque"},{"t":"Te Llaman","k":"Te Llaman"},{"t":"En el País de las Almas Perdidas","k":"En el País de las Almas Perdidas"},{"t":"El Éxodo","k":"En Éxodo"},{"t":"Urnas de Asfalto","k":"Urnas de Asfalto"},{"t":"Tu Jaula","k":"Tu Jaula"},{"t":"La Casa Desdichada","k":"La Casa Desdichada"},{"t":"El Recuerdo","k":"El Recuerdo"},{"t":"El Velo","k":"El Velo"},{"t":"Almas","k":null}]},{"n":"Unplugged","a":"#9a6a3a","tr":[{"t":"Quemas","k":"Quemas - Unplugged"},{"t":"Eres Tú","k":"Eres Tú - Unplugged"},{"t":"Animales","k":"Animales - Unplugged"},{"t":"Sigo Tu Esencia","k":"Sigo Tu Esencia - Unplugged"},{"t":"Nuestros Caminos","k":"Nuestros Caminos - Unplugged"},{"t":"Es el Sino de la Vida","k":"Es el Sino de la Vida - Unplugged"},{"t":"No Pares","k":"No Pares - Unplugged"},{"t":"Fusionados","k":"Fusionados - Unplugged"},{"t":"Sin Valor","k":"Sin Valor - Unplugged"},{"t":"Días Enteros","k":"Días Enteros - Unplugged"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura - Unplugged"},{"t":"El País de las Almas Perdidas","k":"En el País de las Almas Perdidas - Unplugged"}]},{"n":"Unplugged II","a":"#b02a42","tr":[{"t":"El Ojo del Huracán","k":"En el Ojo del Huracán"},{"t":"Déjame Soñar","k":"Déjame Soñar"},{"t":"La Verdad","k":"La Verdad"},{"t":"Sol Rojo","k":"Sol Rojo"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura"},{"t":"Volver a Nacer","k":"Volver a Nacer"},{"t":"La Gacela","k":"La Gacela"},{"t":"Desesperados","k":"Desesperados"},{"t":"Días Enteros – Dirty Blues","k":"Días Enteros - Dirty Blues"}]},{"n":"Unplugged III","a":"#7a4fd0","tr":[{"t":"En una Noche Azul","k":"En una Noche Azul"},{"t":"El Bosque","k":"El Bosque"},{"t":"Te Llaman","k":"Te Llaman"},{"t":"En el País de las Almas Perdidas","k":"En el País de las Almas Perdidas"},{"t":"El Éxodo","k":"En Éxodo"},{"t":"Urnas de Asfalto","k":"Urnas de Asfalto"},{"t":"Tu Jaula","k":"Tu Jaula"},{"t":"La Casa Desdichada","k":"La Casa Desdichada"},{"t":"El Recuerdo","k":"El Recuerdo"},{"t":"El Velo","k":"El Velo"}]}]};
+const DATA={"discs":[{"n":"El Despertar de la Carretera","a":"#b9770e","tr":[{"t":"Quemas","k":"Quemas"},{"t":"Eres Tú","k":"Eres Tú"},{"t":"Animales","k":"Animales"},{"t":"Sigo Tu Esencia","k":"Sigo Tu Esencia"},{"t":"Nuestros Caminos","k":"Nuestros Caminos"},{"t":"Es el Sino de la Vida","k":"Es el Sino de la Vida"},{"t":"No Pares","k":"No Pares"},{"t":"Fusionados","k":"Fusionados"},{"t":"Sin Valor","k":"Sin Valor"},{"t":"Días Enteros","k":"Días Enteros"}]},{"n":"El Camino Chamánico","a":"#c4222d","tr":[{"t":"Déjame Soñar","k":"Déjame Soñar"},{"t":"La Verdad","k":"La Verdad"},{"t":"Sol Rojo","k":"Sol Rojo"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura"},{"t":"Volver a Nacer","k":"Volver a Nacer"},{"t":"La Gacela","k":"La Gacela"},{"t":"Desesperados","k":"Desesperados"},{"t":"El Ojo del Huracán","k":"En el Ojo del Huracán"},{"t":"Días Enteros – Dirty Blues","k":"Días Enteros - Dirty Blues"}]},{"n":"El Viaje Interior a la Oscuridad","a":"#6b3fc0","tr":[{"t":"En una Noche Azul","k":"En una Noche Azul"},{"t":"El Bosque","k":"El Bosque"},{"t":"Te Llaman","k":"Te Llaman"},{"t":"En el País de las Almas Perdidas","k":"En el País de las Almas Perdidas"},{"t":"El Éxodo","k":"En Éxodo"},{"t":"Urnas de Asfalto","k":"Urnas de Asfalto"},{"t":"Tu Jaula","k":"Tu Jaula"},{"t":"La Casa Desdichada","k":"La Casa Desdichada"},{"t":"El Recuerdo","k":"El Recuerdo"},{"t":"El Velo","k":"El Velo"},{"t":"Almas","k":null,"i":1}]},{"n":"Unplugged","a":"#9a6a3a","tr":[{"t":"Quemas","k":"Quemas - Unplugged"},{"t":"Eres Tú","k":"Eres Tú - Unplugged"},{"t":"Animales","k":"Animales - Unplugged"},{"t":"Sigo Tu Esencia","k":"Sigo Tu Esencia - Unplugged"},{"t":"Nuestros Caminos","k":"Nuestros Caminos - Unplugged"},{"t":"Es el Sino de la Vida","k":"Es el Sino de la Vida - Unplugged"},{"t":"No Pares","k":"No Pares - Unplugged"},{"t":"Fusionados","k":"Fusionados - Unplugged"},{"t":"Sin Valor","k":"Sin Valor - Unplugged"},{"t":"Días Enteros","k":"Días Enteros - Unplugged"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura - Unplugged"},{"t":"El País de las Almas Perdidas","k":"En el País de las Almas Perdidas - Unplugged"}]},{"n":"Unplugged II","a":"#b02a42","tr":[{"t":"El Ojo del Huracán","k":"En el Ojo del Huracán"},{"t":"Déjame Soñar","k":"Déjame Soñar"},{"t":"La Verdad","k":"La Verdad"},{"t":"Sol Rojo","k":"Sol Rojo"},{"t":"El Blues de la Triste Figura","k":"El Blues de la Triste Figura"},{"t":"Volver a Nacer","k":"Volver a Nacer"},{"t":"La Gacela","k":"La Gacela"},{"t":"Desesperados","k":"Desesperados"},{"t":"Días Enteros – Dirty Blues","k":"Días Enteros - Dirty Blues"}]},{"n":"Unplugged III","a":"#7a4fd0","tr":[{"t":"En una Noche Azul","k":"En una Noche Azul"},{"t":"El Bosque","k":"El Bosque"},{"t":"Te Llaman","k":"Te Llaman"},{"t":"En el País de las Almas Perdidas","k":"En el País de las Almas Perdidas"},{"t":"El Éxodo","k":"En Éxodo"},{"t":"Urnas de Asfalto","k":"Urnas de Asfalto"},{"t":"Tu Jaula","k":"Tu Jaula"},{"t":"La Casa Desdichada","k":"La Casa Desdichada"},{"t":"El Recuerdo","k":"El Recuerdo"},{"t":"El Velo","k":"El Velo"}]}]};
 const LRC_FOLDER='letras/';   // carpeta del repositorio con los .lrc (igual que en las playlists)
 const cache={};
 function parseLrc(text){
@@ -77,7 +81,7 @@ function getSong(k){
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // páginas: 0 = índice; 1.. = una canción por página
 const pages=[{idx:true}];
-DATA.discs.forEach((d,di)=>d.tr.forEach((t,ti)=>pages.push({di,ti,t:t.t,k:t.k})));
+DATA.discs.forEach((d,di)=>d.tr.forEach((t,ti)=>pages.push({di,ti,t:t.t,k:t.k,i:t.i})));
 const N=pages.length, wideMQ=matchMedia('(min-width:900px)');
 const L=document.getElementById('L'),R=document.getElementById('R');
 let p=Math.max(0,Math.min(N-1,parseInt(location.hash.slice(1))||0));
@@ -96,8 +100,8 @@ function songPage(i){
   const pg=pages[i],d=DATA.discs[pg.di];
   return `<div style="--a:${d.a}"><div class="kicker">${esc(d.n)} · ${pg.ti+1}</div><h2>${esc(pg.t)}</h2><div class="rule"></div><div class="lyr"><p class="nolyr">Cargando letra…</p></div><div class="pn">${i}</div></div>`;
 }
-function lyricsHtml(st){
-  if(st===null)return '<p class="nolyr">Letra pendiente de añadir.</p>';
+function lyricsHtml(st,pg){
+  if(st===null)return pg.i?'<p class="nolyr">Instrumental</p>':'<p class="nolyr">Letra pendiente de añadir.</p>';
   if(st===undefined)return '<p class="nolyr">No se pudo cargar la letra. Comprueba que la página está en el mismo sitio que la carpeta letras/.</p>';
   return st.map(s=>'<div class="stanza">'+s.map(l=>`<p>${esc(l)}</p>`).join('')+'</div>').join('');
 }
@@ -108,7 +112,7 @@ function fill(el,i){
   el.scrollTop=0;
   if(ok&&i>0)getSong(pages[i].k).then(st=>{
     const box=el._tok===tok&&el.querySelector('.lyr');
-    if(box)box.innerHTML=lyricsHtml(st);
+    if(box)box.innerHTML=lyricsHtml(st,pages[i]);
   });
 }
 const lab=i=>i===0?'Índice':i;
@@ -120,7 +124,7 @@ function render(anim){
   const step=wide?2:1;
   document.getElementById('prev').disabled=p<=0;
   document.getElementById('next').disabled=p+step>=N;
-  document.getElementById('ind').textContent=(wide&&p+1<N?lab(p)+' – '+lab(p+1):lab(p))+' / '+(N-1);
+  document.getElementById('ind').textContent=(!wide&&p===0)?'Índice':(wide&&p+1<N?lab(p)+' – '+lab(p+1):lab(p))+' / '+(N-1);
   history.replaceState(null,'','#'+p);
   for(let j=p+step;j<p+step+2&&j<N;j++)getSong(pages[j].k);
   if(anim)[L,R].forEach(e=>e.animate&&e.animate([{opacity:0,transform:'translateX('+(anim*14)+'px)'},{opacity:1,transform:'none'}],{duration:200,easing:'ease-out'}));
