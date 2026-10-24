@@ -43,9 +43,10 @@ h2{font-size:28px;margin-bottom:6px}
 .bar button:disabled{opacity:.35;cursor:default}
 .bar button:not(:disabled):hover{background:#3a2c1c}
 .bar span{color:#a89878;font-size:13px;text-align:center;flex:1}
-.top{max-width:1280px;width:100%;margin:0 auto;padding:calc(6px + env(safe-area-inset-top,0px)) 14px 0}
-.top a{display:inline-flex;align-items:center;gap:4px;min-height:40px;color:#c9b998;text-decoration:none;font:500 13px Lora,Georgia,serif;letter-spacing:.04em}
-.top a:hover,.top a:focus-visible{color:#e8a020;outline:none}
+.top{max-width:1280px;width:100%;margin:0 auto;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 0}
+.top a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 16px;color:#f0e8d8;background:#2a2016;border:1px solid #4a3a28;border-radius:999px;text-decoration:none;font:500 14px Lora,Georgia,serif}
+.top a:hover,.top a:focus-visible{background:#3a2c1c;border-color:#e8a020;color:#fff;outline:none}
+@media(min-width:900px){.top{padding:calc(14px + env(safe-area-inset-top,0px)) 24px 0}}
 </style>
 </head>
 <body>
